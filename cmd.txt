@@ -22,3 +22,9 @@ GET	/products/{id}	show()
 GET	/products/{id}/edit	edit()
 PUT/PATCH	/products/{id}	update()
 DELETE	/products/{id}	destroy()
+
+QUEUE_CONNECTION=database
+php artisan queue:table
+php artisan migrate
+
+php artisan queue:work

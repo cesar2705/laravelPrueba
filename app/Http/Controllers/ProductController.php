@@ -5,6 +5,8 @@ use App\Models\Product;
 
 use Illuminate\Http\Request;
 
+use App\Jobs\CrearProducto;
+
 class ProductController extends Controller
 {
     // Listar productos
@@ -30,6 +32,21 @@ class ProductController extends Controller
         ]));
 
         return response()->json($product, 201);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nombre' => 'required|string',
+            'descripcion' => 'nullable|string',
+            'precio' => 'required|numeric',
+            'stock' => 'required|integer',
+        ]);
+
+        // Lanzamos el job
+        CreateProduct::dispatch($validated);
+
+        return response()->json(['message' => 'Producto en proceso de creación'], 202);
     }
 
     // Mostrar producto por ID
